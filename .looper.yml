@@ -10,7 +10,7 @@ envs:
       oneops.environment: prod
 tools:
   nodejs:
-    - 8.11.1
+    - 8.9.4
   npm:
     - 5.8.0
   sonarscanner:
@@ -28,10 +28,8 @@ flows:
     - call: npm-build-publish(dev)
   pr:
     - "npm install"
-    - call: default-test
   npm-build-publish:
     - "npm install"
-    - call: default-test
     - exposeVars(package.json)
     - |
       (name dev npm publish)
@@ -43,7 +41,6 @@ flows:
     - "npm test"
   npm-bump-publish:
     - "npm install"
-    - call: default-test
     - "rm view.json || true && npm view @walmart/openstack-storage --json >> view.json"
     - exposeVars(package.json):
         vars:
@@ -87,7 +84,6 @@ flows:
       fi
   npm-stable-check:
     - "npm install"
-    - call: default-test
     - exposeVars(package.json)
     - "rm view.json || true && npm view ${package.name} --json >> view.json"
     - exposeVars(view.json):

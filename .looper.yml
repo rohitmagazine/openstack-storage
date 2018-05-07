@@ -1,10 +1,4 @@
 envs:
-  global:
-    variables:
-      oneops.organization: $ORGANIZATION
-      oneops.assembly: $ASSEMBLY
-      oneops.platform: $PLATFORM
-      oneops.component: $COMPONENT
   dev:
     variables:
       oneops.environment: dev
@@ -23,28 +17,19 @@ tools:
     - 3.0.3.778
 triggers:
   - manual:
-      name: Prod Bump-Deploy
-      call: prodBump
+      name: Deploy
+      call: default
   - manual:
       name: Prod Deploy
       call: prod
-  - manual:
-      name: QA Bump-Deploy
-      call: qaBump
-  - manual:
-      name: QA Deploy
-      call: qa
-  - manual:
-      name: Dev Deploy
-      call: default
 flows:
   default:
     - "echo 'node version: '; node --version; echo 'npm version: '; npm --version"
-    - call: dev-npm-build-publish(dev)
+    - call: npm-build-publish(dev)
   pr:
     - "npm install"
     - call: default-test
-  dev-npm-build-publish:
+  npm-build-publish:
     - "npm install"
     - call: default-test
     - exposeVars(package.json)
@@ -54,21 +39,12 @@ flows:
       git reset --hard
       npm version ${package.version}-build.${BUILD_NUMBER}.$(date +%Y%m%d%H%M%S)
       npm publish
-    - call: oneops-deploy
-  oneops-deploy:
-    - exposeVars(package.json)
-    - oneops.transitionVariableUpdate(variables = { appVersion = ${package.version}})
-    - oneops.environmentCommitAndDeploy(deployAllPlatforms = false)
   default-test:
     - "npm test"
   npm-bump-publish:
     - "npm install"
     - call: default-test
-#    - sonar("Sonar"):
-#      - (name sonar) sonar-scanner
-#      - hygieia.publishSonar()
-#    - hygieia.publishBuild()
-    - "rm view.json || true && npm view @walmart/shelf-api --json >> view.json"
+    - "rm view.json || true && npm view @walmart/openstack-storage --json >> view.json"
     - exposeVars(package.json):
         vars:
           code: '.version'
@@ -92,12 +68,12 @@ flows:
       function version_gt() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
       if [ "$STABLE" == "$VERSION" ]
       then
-        echo "@walmart/shelf-api@${VERSION} already deployed"
+        echo "@walmart/openstack-storage@${VERSION} already deployed"
         echo env
         exit 1
       elif version_gt $VERSION $STABLE || [ "$latest" == "" ]
       then
-        echo "deploying @walmart/shelf-api@${VERSION}"
+        echo "deploying @walmart/openstack-storage@${VERSION}"
         npm publish --tag stable
         git tag "$VERSION"
         git push origin "$VERSION"
@@ -129,9 +105,8 @@ flows:
         exit 1
       fi
       npm version "$STABLE" --no-git-tag-version --allow-same-version
-  prodBump:
+  prod:
     - call: npm-bump-publish
-    - call: oneops-deploy(prod)
     - |
       (name version patch)
       #!/bin/bash
@@ -139,12 +114,3 @@ flows:
       git pull origin "$branch"
       npm version patch
       git push origin "$branch"
-  prod:
-    - call: npm-stable-check
-    - call: oneops-deploy(prod)
-  qaBump:
-    - call: npm-bump-publish
-    - call: oneops-deploy(qa)
-  qa:
-    - call: npm-stable-check
-    - call: oneops-deploy(qa)

@@ -5,15 +5,16 @@ _Copyright 2012, FeedHenry Ltd. Licensed under the
 MIT license, please see the LICENSE file.  All rights reserved._
 
 ## Installation
-    npm install openstack-storage
+    npm install @walmart/openstack-storage
 
 ## Example usage 1
+    ```js
     var async = require('async');
     var storage = require('storage');
     var authenticate = require('authenticate');
-    
-    ## get an authentication function. config formats are described in lib/authenticate.js
-    ## use one of these:
+
+    // get an authentication function. config formats are described in lib/authenticate.js
+    // use one of these:
     var authFn = async.apply(authenticate.getTokensKeystone, config); // for keystone auth
     var authFn = async.apply(authenticate.getTokensNative, config); // for native auth (swauth or tempauth)
 
@@ -24,19 +25,22 @@ MIT license, please see the LICENSE file.  All rights reserved._
         // containers is an array of objects [{name: "Name1"...}, ...]
       });
     });
-
+    ```
 ## Example usage 2
+
+    ```js
     // Create a container called "EngTest"
     storageSwift.createContainer("EngTest", function (err, statusCode) {});
-    
-    // upload a local file test.png to a container called "EngTest" naming the remote file: file1.png 
+
+    // upload a local file test.png to a container called "EngTest" naming the remote file: file1.png
     storageSwift.putFile("EngTest", {remoteName:'file1.png', localFile:'./test.png'}, function(err, statusCode) {});
-    
+
     // delete a remote file: file1.png from a container called "EngTest"
     storageSwift.deleteFile("EngTest", 'file1.png', function (err, statusCode) {})
-    
+
     // delete a container
     storageSwift.deleteContainer("EngTest", function (err, statusCode) {});
+    ```
 
 See the `examples` folder for more sample API usage.
 

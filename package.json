@@ -1,6 +1,6 @@
 {
   "author": "Martin Murphy <martin.murphy@feedhenry.com>",
-  "name": "openstack-storage",
+  "name": "@walmart/openstack-storage",
   "description": "Openstack Storage (Swift) client for node.js",
   "keywords": [
     "openstack",
@@ -8,11 +8,10 @@
     "client",
     "javascript"
   ],
-  "version": "0.2.0",
-  "homepage": "https://github.com/feedhenry/openstack-storage",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
-    "url": "git://github.com/feedhenry/openstack-storage.git"
+    "url": "git@gecgithub01.walmart.com:StoreSystemsPOC/openstack-storage.git"
   },
   "main": "lib/storage.js",
   "dependencies": {

@@ -13,9 +13,6 @@ config/stg*
 config/hp*
 config/rack*
 config/local*
-<<<<<<< HEAD
 .idea/*
 package-lock.json
-=======
-.idea/*.*
->>>>>>> snyk-fix-e36722df
+

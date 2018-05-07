@@ -8,18 +8,18 @@
     "client",
     "javascript"
   ],
-  "version": "0.2.2",
+  "version": "0.2.3",
   "repository": {
     "type": "git",
     "url": "git@gecgithub01.walmart.com:StoreSystemsPOC/openstack-storage.git"
   },
   "main": "lib/storage.js",
   "dependencies": {
-    "optimist": "*",
-    "winston": "*",
-    "dateformat": "*",
     "async": "0.1.18",
-    "request": "2.68.0"
+    "dateformat": "*",
+    "optimist": "*",
+    "request": "2.9.202",
+    "winston": "*"
   },
   "scripts": {
     "test": "mocha --ui tdd --globals writeln --reporter spec --timeout 10000"

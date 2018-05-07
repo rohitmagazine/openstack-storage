@@ -13,3 +13,5 @@ config/stg*
 config/hp*
 config/rack*
 config/local*
+.idea/*
+package-lock.json
